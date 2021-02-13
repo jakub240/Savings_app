@@ -12,3 +12,8 @@ class LandingPageView(View):
 class PeriodsListView(View):
     def get(self, request):
         return render(request, 'periods.html')
+
+
+class ExpenseListView(View):
+    def get(self, request):
+        return render(request, 'expense-list.html')

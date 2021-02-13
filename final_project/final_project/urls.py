@@ -19,5 +19,7 @@ import savings_app.views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', v.LandingPageView.as_view(), name='landing-page')
+    path('', v.LandingPageView.as_view(), name='landing-page'),
+    path('periods/', v.PeriodsListView.as_view(), name='periods-list'),
+    path('expense-list/', v.ExpenseListView.as_view(), name='expense-list'),
 ]
