@@ -1,0 +1,34 @@
+[
+  {
+    "model": "savings_app.category",
+    "pk": 1,
+    "fields": {
+      "name": "rent",
+      "description": "cost of a flat, apartment, house, office or any other rental space"
+    }
+  },
+  {
+    "model": "savings_app.category",
+    "pk": 2,
+    "fields": {
+      "name": "food",
+      "description": "cost of a nutrition-based products"
+    }
+  },
+  {
+    "model": "savings_app.category",
+    "pk": 3,
+    "fields": {
+      "name": "miscellaneous",
+      "description": "other types of costs, like utilities etc."
+    }
+  },
+  {
+    "model": "savings_app.category",
+    "pk": 4,
+    "fields": {
+      "name": "incidental",
+      "description": "unexpected expenses, not typical"
+    }
+  }
+]

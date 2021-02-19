@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+    {% block title %}
+    <h2>Add New Expense</h2>
+    {% endblock %}
+        {% block content %}
+        <div>
+            <ul>
+            {% for exp in expense_list %}
+                <li>{{ exp.name }} {{ exp.price }}</li>
+            {% empty %}
+                <li>It seems you have no expenses added yet.</li>
+            {% endfor %}
+            </ul>
+        </div>
+          <form action="" method="POST">
+            {% csrf_token %}
+            {{form.as_ul}}
+            <input type="submit" />
+          </form>
+        {% endblock %}

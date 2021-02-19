@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-import savings_app.views as v
+from savings_app.views import (
+                        LandingPageView,
+                        ExpensesListFormView,
+                        AddUserView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', v.LandingPageView.as_view(), name='landing-page'),
-    path('periods/', v.PeriodsListView.as_view(), name='periods-list'),
-    path('expense-list/', v.ExpenseListView.as_view(), name='expense-list'),
+    path('', LandingPageView.as_view(), name='landing-page'),
+    # path('login/', LoginFormView.as_view(), name='login'),
+    # path('logout/', LogoutView.as_view(), name='logout'),
+    path('add_user/', AddUserView.as_view(), name='add-user'),
+    # path('periods/', PeriodsListView.as_view(), name='periods-list'),
+    path('expenses/', ExpensesListFormView.as_view(), name='expense-list-form'),
 ]
