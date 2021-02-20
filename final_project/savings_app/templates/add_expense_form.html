@@ -1,17 +1,19 @@
 {% extends "base.html" %}
     {% block title %}
-    <h2>Add New Expense</h2>
+    <h2>Your Expenses</h2>
     {% endblock %}
         {% block content %}
         <div>
             <ul>
             {% for exp in expense_list %}
-                <li>{{ exp.name }} {{ exp.price }} {{ exp.user }} {{ exp.date }}</li>
+                <li>{{ exp.name }} {{ exp.price }} {{ exp.owner }} {{ exp.created|date:"Y, M d"}}</li>
             {% empty %}
                 <li>It seems you have no expenses added yet.</li>
             {% endfor %}
             </ul>
         </div>
+            <hr>
+            <h2>Add New Expense</h2>
           <form action="" method="POST">
             {% csrf_token %}
             {{form.as_ul}}

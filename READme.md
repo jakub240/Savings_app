@@ -16,3 +16,16 @@ Nie działa :
 - wyświetlanie wydatków (prawdopodobnie przekombinowałem odniesienia do htmla i z html do widoku)
 spróbuje jeszcze jutro rano to naprawić
   
+
+Po korekcie, uwagi :
+
+class Budget:
+	start_date = datetime
+	end_date = datetime
+	amount = 
+	category = ManytoMany
+	
+	
+class Regions(miasta)
+
+docstringi^^

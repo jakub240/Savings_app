@@ -33,11 +33,6 @@ class ExpensesListFormView(LoginRequiredMixin, View):
     def get(self, request):
         form = AddExpenseForm()
         expense_list = Expense.objects.all()
-        for exp in expense_list:
-            name = exp.name
-            price = exp.price
-            user = exp.owner
-            date = exp.created
         ctx = {
             'expense_list': expense_list,
             'form': form
@@ -57,7 +52,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                 created=datetime.now()
             )
 
-        return render(request, 'add_expense_form.html')
+        return redirect('expense-list-form')
 
 
 class LoginFormView(View):
