@@ -2,14 +2,15 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse_lazy
-from .models import Expense
-from .forms import AddExpenseForm, AddUserForm
+from .models import Expense, AppUsers
+from .forms import AddExpenseForm, AddUserForm, LoginForm
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 
 class LandingPageView(View):
     def get(self, request):
@@ -26,7 +27,9 @@ class LandingPageView(View):
         return render(request, 'expense_list.html')"""
 
 
-class ExpensesListFormView(View):
+class ExpensesListFormView(LoginRequiredMixin, View):
+    login_url = '/login/'
+
     def get(self, request):
         form = AddExpenseForm()
         expense_list = Expense.objects.all()
@@ -40,11 +43,24 @@ class ExpensesListFormView(View):
             'form': form
         }
         return render(request, 'add_expense_form.html', ctx)
+
     def post(self, request):
-        pass
+        form = AddExpenseForm(request.POST)
+        current_user = request.user
+        if form.is_valid():
+            Expense.objects.create(
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                category=form.cleaned_data['category'],
+                price=form.cleaned_data['price'],
+                owner=current_user,
+                created=datetime.now()
+            )
+
+        return render(request, 'add_expense_form.html')
 
 
-"""class LoginFormView(View):
+class LoginFormView(View):
     def get(self, request):
         form = LoginForm()
         return render(request, "login.html", {"form": form})
@@ -56,22 +72,23 @@ class ExpensesListFormView(View):
             password = form.cleaned_data["password"]
             user = authenticate(request, username=username, password=password)
             if user is None:
-                return render(request, "login.html", {"form": form})
+                msg = 'There is no such user!'
+                return render(request, "login.html", {"form": form, 'msg': msg})
             else:
                 login(request, user=user)
-                return redirect("index")
+                return redirect('landing-page')
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect("index")
-"""
+        return redirect('landing-page')
+
 
 class AddUserView(FormView):
     form_class = AddUserForm
     template_name = "add_user.html"
-    success_url = reverse_lazy("index")
+    success_url = reverse_lazy('landing-page')
 
     def form_valid(self, form):
         user = form.save()
@@ -90,5 +107,5 @@ class ChangePasswordView(FormView):
         user = User.objects.get(pk=id)
         user.set_password(form.cleaned_data["password"])
         user.save()
-        return super().form_valid(form)"""
-
+        return super().form_valid(form)
+"""

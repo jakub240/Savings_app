@@ -1,20 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
-# Create your models here.
 
 CITIES = (
-    (1, 'Warszawa'),
-    (2, 'Kraków'),
-    (3, 'Gdańsk'),
-    (4, 'Lublin'),
-    (5, 'Kielce'),
-    (6, 'Wrocław'),
-    (7, 'Poznań'),
+    ('Warszawa', 'Warszawa'),
+    ('Kraków', 'Kraków'),
+    ('Gdańsk', 'Gdańsk'),
+    ('Lublin', 'Lublin'),
+    ('Kielce', 'Kielce'),
+    ('Wrocław', 'Wrocław'),
+    ('Poznań', 'Poznań'),
 )
 
 
 class AppUsers(AbstractUser):
+    """
+    This is an overwrite of auth.User model with two additional columns:
+    date_of_birth = date of birth
+    city = city of a user
+    """
     date_of_birth = models.DateTimeField()
     city = models.CharField(max_length=30, choices=CITIES)
 

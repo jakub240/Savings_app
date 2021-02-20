@@ -19,13 +19,15 @@ from savings_app.views import (
                         LandingPageView,
                         ExpensesListFormView,
                         AddUserView,
+                        LoginFormView,
+                        LogoutView,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name='landing-page'),
-    # path('login/', LoginFormView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(), name='logout'),
+    path('login/', LoginFormView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('add_user/', AddUserView.as_view(), name='add-user'),
     # path('periods/', PeriodsListView.as_view(), name='periods-list'),
     path('expenses/', ExpensesListFormView.as_view(), name='expense-list-form'),

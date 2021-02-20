@@ -6,7 +6,7 @@
         <div>
             <ul>
             {% for exp in expense_list %}
-                <li>{{ exp.name }} {{ exp.price }}</li>
+                <li>{{ exp.name }} {{ exp.price }} {{ exp.user }} {{ exp.date }}</li>
             {% empty %}
                 <li>It seems you have no expenses added yet.</li>
             {% endfor %}

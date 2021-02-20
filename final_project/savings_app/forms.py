@@ -4,10 +4,11 @@ from django.core.validators import EmailValidator, URLValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-"""class LoginForm(forms.Form):
+
+class LoginForm(forms.Form):
     login = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-"""
+
 
 class AddUserForm(forms.ModelForm):
     class Meta:
@@ -36,8 +37,8 @@ class AddUserForm(forms.ModelForm):
             self.add_error('password', msg)
             self.add_error('repeat_password', msg)
 
-"""
-class UserPasswordChangeForm(forms.Form):
+
+"""class UserPasswordChangeForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     re_password = forms.CharField(widget=forms.PasswordInput)
 
@@ -54,9 +55,9 @@ class UserPasswordChangeForm(forms.Form):
 
 class AddExpenseForm(forms.Form):
     name = forms.CharField()
-    description = forms.TextInput()
+    description = forms.CharField()
     category = forms.ModelChoiceField(queryset=Category.objects, empty_label=None)
-    price = forms.FloatField()
+    price = forms.DecimalField()
 
 
 

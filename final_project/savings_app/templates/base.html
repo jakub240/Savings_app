@@ -12,5 +12,14 @@
     <hr>
     {% block content %}
     {% endblock %}
+<p>
+    {% if not request.user.is_authenticated %}
+    <p> Nie jesteś zalogowany: <a href="{% url 'login' %}">Zaloguj</a><p>
+        {% else %}
+        Jesteś zalogowany jako {{ request.user }}
+        <a href="{% url 'login' %}">Zaloguj</a>
+        <a href="{% url 'logout' %}">Wyloguj</a>
+    {% endif %}
+</p>
 </body>
 </html>
