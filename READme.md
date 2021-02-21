@@ -10,11 +10,6 @@ ma zaimplementowaną konieczność bycia zalogowanym i odsyła do formularza log
 
 - dodawanie Expenses
 
-
-Nie działa :
-
-- wyświetlanie wydatków (prawdopodobnie przekombinowałem odniesienia do htmla i z html do widoku)
-spróbuje jeszcze jutro rano to naprawić
   
 
 Po korekcie, uwagi :
