@@ -8,17 +8,18 @@
 </head>
 <body>
     {% block title %}
+    <a href="{% url 'expense-list-form' %}">List of your expenses</a>
     {% endblock %}
     <hr>
     {% block content %}
     {% endblock %}
 <p>
     {% if not request.user.is_authenticated %}
-    <p> Nie jesteś zalogowany: <a href="{% url 'login' %}">Zaloguj</a><p>
+    <p> You are not logged in </p>
+        <a href="{% url 'login' %}">Log in</a>
         {% else %}
-        Jesteś zalogowany jako {{ request.user }}
-        <a href="{% url 'login' %}">Zaloguj</a>
-        <a href="{% url 'logout' %}">Wyloguj</a>
+        You are logged in as {{ request.user }}
+        <a href="{% url 'logout' %}">Log out</a>
     {% endif %}
 </p>
 </body>
