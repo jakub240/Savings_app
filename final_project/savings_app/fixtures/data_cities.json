@@ -1,0 +1,72 @@
+[
+  {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Warszawa",
+      "country": "Poland",
+      "region": "Mazowieckie",
+      "key": 654321
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Gdańsk",
+      "country": "Poland",
+      "region": "Pomorskie",
+      "key": 254324
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Katowice",
+      "country": "Poland",
+      "region": "Śląskie",
+      "key": 530954
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Kraków",
+      "country": "Poland",
+      "region": "Małopolskie",
+      "key": 654321
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Wrocław",
+      "country": "Poland",
+      "region": "Dolnośląskie",
+      "key": 654321
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Kielce",
+      "country": "Poland",
+      "region": "Świętokrzyskie",
+      "key": 654321
+    }
+  },
+    {
+    "model": "savings_app.cities",
+    "pk": 1,
+    "fields": {
+      "name": "Poznań",
+      "country": "Poland",
+      "region": "Wielkopolskie",
+      "key": 654321
+    }
+  }
+]
