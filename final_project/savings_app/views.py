@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse_lazy
 from .models import Expense, AppUsers
-from .forms import AddExpenseForm, AddUserForm
+from .forms import AddExpenseForm, AddUserForm, AddBudgetForm
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -32,9 +32,9 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = AddExpenseForm()
-        expense_list = Expense.objects.all()
+        expenses = Expense.objects.filter(owner=request.user)
         ctx = {
-            'expense_list': expense_list,
+            'expenses': expenses,
             'form': form
         }
         return render(request, 'add_expense_form.html', ctx)
@@ -51,8 +51,15 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                 owner=current_user,
                 created=datetime.now()
             )
-
         return redirect('expense-list-form')
+
+
+class AddBudgetFormView(View):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
 
 
 class AddUserView(FormView):

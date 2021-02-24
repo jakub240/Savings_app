@@ -4,12 +4,16 @@ from django.core.validators import EmailValidator, URLValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+def number_validator(number):
+    if not number > 0:
+        raise forms.ValidationError("Your number must be positive")
+
 
 class AddExpenseForm(forms.Form):
     name = forms.CharField()
     description = forms.CharField()
     category = forms.ModelChoiceField(queryset=Category.objects, empty_label=None)
-    price = forms.DecimalField()
+    price = forms.DecimalField(decimal_places=2, min_value=0, validators=[number_validator])
 
 
 class AddUserForm(forms.ModelForm):
@@ -40,7 +44,8 @@ class AddUserForm(forms.ModelForm):
             self.add_error('repeat_password', msg)
 
 
-
-
-
-
+class AddBudgetForm(forms.Form):
+    start_date = forms.DateTimeField()
+    end_date = forms.DateTimeField()
+    amount = forms.DecimalField(decimal_places=2, min_value=0, validators=[number_validator])
+    category = forms.ModelChoiceField(queryset=Category.objects, empty_label=None)

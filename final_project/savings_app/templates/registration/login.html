@@ -9,4 +9,8 @@
             {{form.as_ul}}
             <input type="submit" />
           </form>
+        <div>
+            <p>Don't have a profile yet?</p>
+            <a href="{% url 'add-user' %}">Create a profile here</a>
+        </div>
         {% endblock %}

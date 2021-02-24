@@ -1,16 +1,32 @@
 {% extends "base.html" %}
     {% block title %}
-    <h2>Your Expenses</h2>
+<h2 xmlns="http://www.w3.org/1999/html">Your Expenses</h2>
     {% endblock %}
         {% block content %}
         <div>
-            <ul>
-            {% for exp in expense_list %}
-                <li>{{ exp.name }} {{ exp.price }} {{ exp.owner }} {{ exp.created|date:"Y, M d"}}</li>
+                <table style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                    </tr>
+                 {% for exp in expenses %}
+                    <tr>
+                        <th> {{ exp.name }} </th>
+                        <th> {{ exp.price }} </th>
+                        <th> {{ exp.created|date:"Y, M d"}}</th>
+                        <th>
+                             <btn>Modify</btn>
+                        </th>
+                         <th>
+                             <btn>Delete</btn>
+                        </th>
+
+                    </tr>
             {% empty %}
                 <li>It seems you have no expenses added yet.</li>
             {% endfor %}
-            </ul>
+                </table>
         </div>
             <hr>
             <h2>Add New Expense</h2>

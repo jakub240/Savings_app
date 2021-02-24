@@ -11,7 +11,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 2,
     "fields": {
       "name": "Gdańsk",
       "country": "Poland",
@@ -21,7 +21,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 3,
     "fields": {
       "name": "Katowice",
       "country": "Poland",
@@ -31,7 +31,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 4,
     "fields": {
       "name": "Kraków",
       "country": "Poland",
@@ -41,7 +41,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 5,
     "fields": {
       "name": "Wrocław",
       "country": "Poland",
@@ -51,7 +51,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 6,
     "fields": {
       "name": "Kielce",
       "country": "Poland",
@@ -61,7 +61,7 @@
   },
     {
     "model": "savings_app.cities",
-    "pk": 1,
+    "pk": 7,
     "fields": {
       "name": "Poznań",
       "country": "Poland",
