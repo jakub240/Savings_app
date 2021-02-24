@@ -2,15 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
 
-CITIES = (
-    ('Warszawa', 'Warszawa'),
-    ('Kraków', 'Kraków'),
-    ('Gdańsk', 'Gdańsk'),
-    ('Lublin', 'Lublin'),
-    ('Kielce', 'Kielce'),
-    ('Wrocław', 'Wrocław'),
-    ('Poznań', 'Poznań'),
-)
+class Cities(models.Model):
+    """
+    Model for cities:
+    name = name of the city
+    country = country
+    region = administrative unit (state, land, province, voivodeship etc)
+    key = special code
+    """
+    name = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    region = models.CharField(max_length=100)
+    key = models.IntegerField(default=00000)
+
+    def __str__(self):
+        return self.name
 
 
 class AppUsers(AbstractUser):
@@ -20,7 +26,7 @@ class AppUsers(AbstractUser):
     city = city of a user
     """
     date_of_birth = models.DateTimeField()
-    city = models.CharField(max_length=30, choices=CITIES)
+    city = models.ForeignKey(Cities, on_delete=models.CASCADE)
 
 
 class Category(models.Model):
@@ -54,3 +60,8 @@ class Expense(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
+class Budget(models.Model):
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    amount = models.FloatField(default=0)
+    category = models.ManyToManyField(Category)
