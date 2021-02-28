@@ -61,7 +61,15 @@ class Expense(models.Model):
 
 
 class Budget(models.Model):
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    """
+        Model for maximum amount of expenses given by user to bear within selected period of time
+          - start_date: beginning of a time period for which a budget is applied
+          - end_date: end of a time period for which a budget is applied
+          - amount: an equivalent of 'price' column in Expense model
+          - category: relation to Category model
+    """
+    start_date = models.DateField()
+    end_date = models.DateField()
     amount = models.FloatField(default=0)
-    category = models.ManyToManyField(Category)
+    owner = models.ForeignKey(AppUsers, on_delete=models.CASCADE, default=None)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)

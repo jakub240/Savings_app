@@ -22,6 +22,11 @@ from savings_app.views import (
                         UserProfileView,
                         AddUserView,
                         AddBudgetFormView,
+                        ExpenseRemoveView,
+                        BudgetRemoveView,
+                        ExpenseModifyView,
+                        BudgetModifyView,
+
 )
 
 urlpatterns = [
@@ -33,7 +38,11 @@ urlpatterns = [
     path('/add_user/', AddUserView.as_view(), name='add-user'),
     # path('periods/', PeriodsListView.as_view(), name='periods-list'),
     path('expenses/', ExpensesListFormView.as_view(), name='expense-list-form'),
-    path('budget-add/', AddBudgetFormView.as_view(), name='budget-add'),
+    path('add_budget/', AddBudgetFormView.as_view(), name='add-budget'),
+    path('expenses/remove/<int:expense_id>/', ExpenseRemoveView.as_view(), name='expense-remove'),
+    path('budget/remove/<int:budget_id>/', BudgetRemoveView.as_view(), name='budget-remove'),
+    path('expenses/modify/<int:pk>/', ExpenseModifyView.as_view(), name='expense-modify'),
+    path('budget/modify/<int:pk>/', BudgetModifyView.as_view(), name='budget-modify'),
 ]
 
 

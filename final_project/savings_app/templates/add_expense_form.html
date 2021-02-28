@@ -8,18 +8,20 @@
                     <tr>
                         <th>Name</th>
                         <th>Price</th>
+                        <th>Category</th>
                         <th>Date</th>
                     </tr>
                  {% for exp in expenses %}
                     <tr>
                         <th> {{ exp.name }} </th>
                         <th> {{ exp.price }} </th>
+                        <th> {{ exp.category }}</th>
                         <th> {{ exp.created|date:"Y, M d"}}</th>
                         <th>
-                             <btn>Modify</btn>
+                             <a href="{% url 'expense-modify' exp.id %}">Modify</a>
                         </th>
                          <th>
-                             <btn>Delete</btn>
+                             <a href="{% url 'expense-remove' exp.id %}">Delete</a>
                         </th>
 
                     </tr>
@@ -27,12 +29,51 @@
                 <li>It seems you have no expenses added yet.</li>
             {% endfor %}
                 </table>
+            <div>
+                <p> Sum of your expenses: {{ exp_sum }} </p>
+            </div>
         </div>
-            <hr>
+        <hr>
+    <h2>Your Budgets</h2>
+        <div>
+                <table style="width:100%">
+                    <tr>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                 {% for bdg in budgets %}
+                    <tr>
+                        <th> {{ bdg.amount }} </th>
+                        <th> {{ bdg.category }}</th>
+                        <th> {{ bdg.start_date|date:"Y, M d" }} </th>
+                        <th> {{ bdg.end_date|date:"Y, M d"}}</th>
+                        <th>
+                             <a href="{% url 'budget-modify' bdg.id %}">Modify</a>
+                        </th>
+                         <th>
+                             <a href="{% url 'budget-remove' bdg.id %}">Delete</a>
+                        </th>
+
+                    </tr>
+            {% empty %}
+                <li>It seems you have no budget added yet.</li>
+            {% endfor %}
+                </table>
+            <div>
+                <p> Sum of your budgets: {{ bdg_sum }} </p>
+            </div>
+        </div>
+        <hr>
             <h2>Add New Expense</h2>
           <form action="" method="POST">
             {% csrf_token %}
             {{form.as_ul}}
             <input type="submit" />
           </form>
+        <hr>
+            <div>
+                <h2><a href="{% url 'add-budget' %}">Add budget</a></h2>
+            </div>
         {% endblock %}

@@ -2,9 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse_lazy
-from .models import Expense, AppUsers
+from django.db.models import Sum
+from .models import Expense, AppUsers, Budget, Category
 from .forms import AddExpenseForm, AddUserForm, AddBudgetForm
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
@@ -33,8 +34,15 @@ class ExpensesListFormView(LoginRequiredMixin, View):
     def get(self, request):
         form = AddExpenseForm()
         expenses = Expense.objects.filter(owner=request.user)
+        budgets = Budget.objects.filter(owner=request.user)
+        exp_sum = expenses.aggregate(Sum('price'))['price__sum']
+        bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
+
         ctx = {
             'expenses': expenses,
+            'budgets': budgets,
+            'exp_sum': exp_sum,
+            'bdg_sum': bdg_sum,
             'form': form
         }
         return render(request, 'add_expense_form.html', ctx)
@@ -56,10 +64,50 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
 class AddBudgetFormView(View):
     def get(self, request):
-        pass
+        form = AddBudgetForm()
+        ctx = {
+            'form': form
+        }
+        return render(request, 'add_budget_form.html', ctx)
 
     def post(self, request):
-        pass
+        form = AddBudgetForm(request.POST)
+        current_user = request.user
+        if form.is_valid():
+            Budget.objects.create(
+                start_date=form.cleaned_data['start_date'],
+                end_date=form.cleaned_data['end_date'],
+                amount=form.cleaned_data['amount'],
+                category=form.cleaned_data['category'],
+                owner=current_user
+            )
+        return redirect('expense-list-form')
+
+
+class ExpenseRemoveView(View):
+    def get(self, request, expense_id):
+        Expense.objects.get(pk=expense_id).delete()
+        return redirect('expense-list-form')
+
+
+class BudgetRemoveView(View):
+    def get(self, request, budget_id):
+        Budget.objects.get(pk=budget_id).delete()
+        return redirect('expense-list-form')
+
+
+class ExpenseModifyView(UpdateView):
+    model = Expense
+    fields = ['name', 'description', 'category', 'price']
+    template_name_suffix = '_modify'
+    success_url = reverse_lazy('expense-list-form')
+
+
+class BudgetModifyView(UpdateView):
+    model = Budget
+    fields = ['amount', 'category', 'start_date', 'end_date']
+    template_name_suffix = '_modify'
+    success_url = reverse_lazy('expense-list-form')
 
 
 class AddUserView(FormView):
