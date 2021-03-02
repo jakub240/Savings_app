@@ -36,7 +36,6 @@ urlpatterns = [
     path('/accounts/logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('', LandingPageView.as_view(), name='landing-page'),
     path('/add_user/', AddUserView.as_view(), name='add-user'),
-    # path('periods/', PeriodsListView.as_view(), name='periods-list'),
     path('expenses/', ExpensesListFormView.as_view(), name='expense-list-form'),
     path('add_budget/', AddBudgetFormView.as_view(), name='add-budget'),
     path('expenses/remove/<int:expense_id>/', ExpenseRemoveView.as_view(), name='expense-remove'),

@@ -18,16 +18,6 @@ class LandingPageView(View):
         return render(request, 'base.html')
 
 
-"""class PeriodsListView(View):
-    def get(self, request):
-        return render(request, 'periods.html')"""
-
-
-"""class ExpenseListView(View):
-    def get(self, request):
-        return render(request, 'expense_list.html')"""
-
-
 class ExpensesListFormView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
@@ -127,7 +117,5 @@ class UserProfileView(View):
         return render(request, 'registration/profile.html')
 
 
-# class LogoutView(View):
-#     def get(self, request):
-#         return render(request, 'registration/logout.html')
+
 
