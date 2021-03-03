@@ -17,7 +17,7 @@
     <hr>
     {% block content %}
     {% endblock %}
-<p>
+<div>
     {% if not request.user.is_authenticated %}
     <p> You are not logged in </p>
         <a href="{% url 'login' %}">Log in</a>
@@ -25,6 +25,6 @@
         You are logged in as {{ request.user }}
         <a href="{% url 'logout' %}">Log out</a>
     {% endif %}
-</p>
+</div>
 </body>
 </html>

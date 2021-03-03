@@ -3,6 +3,10 @@
 <h2 xmlns="http://www.w3.org/1999/html">Your Expenses</h2>
     {% endblock %}
         {% block content %}
+<!--        <p> Categories : </p>-->
+<!--        <p> {% for ctg in categories %}</p>-->
+<!--            <p> {{ ctg.name }} </p>-->
+<!--            {% endfor %}-->
         <div>
                 <table style="width:100%">
                     <tr>
@@ -63,6 +67,8 @@
                 </table>
             <div>
                 <p> Sum of your budgets: {{ bdg_sum }} </p>
+                <p> Budget per category: {{ bdg_per_ctg }}</p>
+                <p> Budget days : {{ bdg_days }}</p>
             </div>
         </div>
         <hr>
