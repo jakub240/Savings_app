@@ -23,16 +23,25 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = AddExpenseForm()
-        expenses = Expense.objects.filter(owner=request.user)
+        expenses = Expense.objects.filter(owner=request.user).order_by('-created')
         budgets = Budget.objects.filter(owner=request.user)
+
         exp_sum = expenses.aggregate(Sum('price'))['price__sum']
         bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
+
+        bdg_per_ctg = Budget.objects.filter(owner=request.user, category=2)
+        bdg_per_ctg_sum = bdg_per_ctg.aggregate(Sum('amount'))['amount__sum']
+        bdg_days = (bdg_per_ctg.values('end_date').first()['end_date'] - datetime.now().date()).days
+
+
 
         ctx = {
             'expenses': expenses,
             'budgets': budgets,
             'exp_sum': exp_sum,
             'bdg_sum': bdg_sum,
+            'bdg_days': bdg_days,
+            'bdg_per_ctg': bdg_per_ctg_sum,
             'form': form
         }
         return render(request, 'add_expense_form.html', ctx)

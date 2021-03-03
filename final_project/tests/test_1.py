@@ -19,11 +19,11 @@ def city():
 
 
 @pytest.fixture
-def user():
+def user(city):
     user = AppUsers.objects.create(
         username='test_user',
         password='test_password',
-        date_of_birth='2000-01-01',
+        date_of_birth='2000-01-01 00:00Z',
         city=city
     )
     return user
@@ -101,7 +101,7 @@ def test_expense_view_logged(client, user):
     """
             tests and attempt to access Expense_List_Form_View while logged in
     """
-    client.login(user.username, password='test_password')
+    client.force_login(user=user)
     response = client.get('/expenses/')
     assert response.status_code == 200
 
@@ -133,25 +133,25 @@ def test_expense_view_logged(client, user):
 #     assert response.status_code == 302
 
 
-# @pytest.mark.django_db
-# def test_add_budget_form(client):
-#     client.force_login(user=user)
-#     context = {
-#         'start_date': '2000-01-01',
-#         'end_date': '2000-01-02',
-#         'amount': 1000,
-#         'category': category,
-#         'owner': user,
-#     }
-#     count = Budget.objects.count()
-#     response = client.post(reverse('add-budget'), context)
-#     bdg = Budget.objects.get(
-#         start_date='2000-01-01',
-#         end_date='2000-01-02',
-#         amount=1000,
-#         category=category,
-#         owner=user,
-#     )
-#     assert bdg is not None
-#     assert Budget.objects.count() == count + 1
-#     assert response.status_code == 302
+@pytest.mark.django_db
+def test_add_budget_form(client, user, category):
+    client.force_login(user=user)
+    context = {
+        'start_date': '2000-01-01',
+        'end_date': '2000-01-02',
+        'amount': 1000,
+        'category': category,
+        'owner': user,
+    }
+    count = Budget.objects.count()
+    response = client.post(reverse('add-budget'), context)
+    bdg = Budget.objects.get(
+        start_date='2000-01-01',
+        end_date='2000-01-02',
+        amount=1000,
+        category=category,
+        owner=user,
+    )
+    assert bdg is not None
+    assert Budget.objects.count() == count + 1
+    assert response.status_code == 302
