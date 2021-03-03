@@ -32,14 +32,14 @@ def user(city):
 @pytest.fixture
 def category():
     category = Category.objects.create(
-        name='test_expense',
+        name='test_category',
         description='test_desc',
     )
     return category
 
 
 @pytest.fixture
-def expense():
+def expense(user, category):
     expense = Expense.objects.create(
         name='test_expense',
         description='test_desc',
@@ -51,7 +51,7 @@ def expense():
 
 
 @pytest.fixture
-def budget():
+def budget(user, category):
     budget = Budget.objects.create(
         start_date='2000-01-01',
         end_date='2000-01-02',
@@ -97,12 +97,29 @@ def test_expense_view_not_logged(client):
 
 
 @pytest.mark.django_db
-def test_expense_view_logged(client, user):
+def test_expense_view_logged(client, user, expense, budget):
     """
             tests and attempt to access Expense_List_Form_View while logged in
+            and getting an Expense and Budget objects
     """
     client.force_login(user=user)
-    response = client.get('/expenses/')
+    response = client.get(reverse('expense-list-form'))
+    assert response.status_code == 200
+    assert response.context['expenses'][0] == expense
+    assert response.context['budgets'][0] == budget
+
+
+@pytest.mark.django_db
+def test_expense_modify_get(client, user, expense):
+    client.force_login(user=user)
+    response = client.get(reverse('expense-modify', kwargs={'pk': expense.id}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_budget_modify_get(client, user, budget):
+    client.force_login(user=user)
+    response = client.get(reverse('budget-modify', kwargs={'pk': budget.id}))
     assert response.status_code == 200
 
 
@@ -133,25 +150,25 @@ def test_expense_view_logged(client, user):
 #     assert response.status_code == 302
 
 
-@pytest.mark.django_db
-def test_add_budget_form(client, user, category):
-    client.force_login(user=user)
-    context = {
-        'start_date': '2000-01-01',
-        'end_date': '2000-01-02',
-        'amount': 1000,
-        'category': category,
-        'owner': user,
-    }
-    count = Budget.objects.count()
-    response = client.post(reverse('add-budget'), context)
-    bdg = Budget.objects.get(
-        start_date='2000-01-01',
-        end_date='2000-01-02',
-        amount=1000,
-        category=category,
-        owner=user,
-    )
-    assert bdg is not None
-    assert Budget.objects.count() == count + 1
-    assert response.status_code == 302
+# @pytest.mark.django_db
+# def test_add_budget_form(client, user, category):
+#     client.force_login(user=user)
+#     context = {
+#         'start_date': '2000-01-01',
+#         'end_date': '2000-01-02',
+#         'amount': 1000,
+#         'category': category,
+#         'owner': user,
+#     }
+#     count = Budget.objects.count()
+#     response = client.post(reverse('add-budget'), context)
+#     bdg = Budget.objects.get(
+#         start_date='2000-01-01',
+#         end_date='2000-01-02',
+#         amount=1000,
+#         category=category,
+#         owner=user,
+#     )
+#     assert bdg != None
+#     assert Budget.objects.count() == count + 1
+#     assert response.status_code == 302
