@@ -25,22 +25,29 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         form = AddExpenseForm()
         expenses = Expense.objects.filter(owner=request.user).order_by('-created')
         budgets = Budget.objects.filter(owner=request.user)
-
         exp_sum = expenses.aggregate(Sum('price'))['price__sum']
         bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
-        bdg_per_ctg = Budget.objects.filter(owner=request.user, category=2)
+
+        bdg_per_ctg = Budget.objects.filter(owner=request.user, category=3)
         bdg_per_ctg_sum = bdg_per_ctg.aggregate(Sum('amount'))['amount__sum']
+
+        exp_per_ctg = Expense.objects.filter(owner=request.user, category=3)
+        exp_per_ctg_sum = exp_per_ctg.aggregate(Sum('price'))['price__sum']
 
         ctx = {'form': form,
                'expenses': expenses,
                'budgets': budgets,
                'exp_sum': exp_sum,
                'bdg_sum': bdg_sum,
-               'bdg_per_ctg_sum': bdg_per_ctg_sum}
+               'bdg_per_ctg_sum': bdg_per_ctg_sum,
+               'exp_per_ctg_sum': exp_per_ctg_sum,
+        }
 
         if bdg_per_ctg:
             bdg_days = (bdg_per_ctg.values('end_date').first()['end_date'] - datetime.now().date()).days
+            bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
             ctx['bdg_days'] = bdg_days
+            ctx['bdg_per_day'] = bdg_per_day
 
         return render(request, 'add_expense_form.html', ctx)
 

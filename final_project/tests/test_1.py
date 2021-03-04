@@ -102,7 +102,7 @@ def test_add_user(user, client, city):
                'repeat_password': 'test_password2',
                'email': 'test@mail.com',
                'date_of_birth': '2001-01-01',
-               'city': city
+               'city': city.pk
                }
     count = AppUsers.objects.count()
     assert count == 1
@@ -148,51 +148,38 @@ def test_budget_modify_get(client, user, budget):
     assert response.status_code == 200
 
 
-# @pytest.mark.django_db
-# def test_expenses_list_form_view(client, user, category, expense):
-#     client.force_login(user=user)
-#     context = {
-#         "name": 'test_expense',
-#         "description": 'test_description',
-#         'category': category,
-#         "price": 100,
-#
-#     }
-#     count = Expense.objects.count()
-#     response = client.post(reverse('expense-list-form'), context)
-#     expense = Expense.objects.filter(
-#                             name='test_expense',
-#                             description='test_description',
-#                             category=category,
-#                             price=100,
-#     )
-#     assert expense != None
-#     assert Expense.objects.count() == count + 1
-#     assert response.status_code == 302
+@pytest.mark.django_db
+def test_expenses_list_form_view(client, user, category, expense):
+    client.force_login(user=user)
+    context = {
+        "name": 'test_expense',
+        "description": 'test_description',
+        'category': category.pk,
+        "price": 100,
+
+    }
+    count = Expense.objects.count()
+    response = client.post(reverse('expense-list-form'), context)
+
+    assert Expense.objects.count() == count + 1
+    assert response.status_code == 302
 
 
-# @pytest.mark.django_db
-# def test_add_budget_form(budget, client, user, category):
-#     client.force_login(user=user)
-#     context = {
-#         'start_date': '2000-01-15',
-#         'end_date': '2000-01-16',
-#         'amount': 2000,
-#         'category': category,
-#
-#     }
-#     count = Budget.objects.count()
-#     assert count == 1
-#     response = client.post(reverse('add-budget'), context)
-#     bdg = Budget.objects.filter(
-#         start_date='2000-01-15',
-#         end_date='2000-01-16',
-#         amount=2000,
-#         category=category,
-#
-#     )
-#     assert bdg != None
-#     assert Budget.objects.count() == count + 1
-#     assert response.status_code == 302
+@pytest.mark.django_db
+def test_add_budget_form(budget, client, user, category):
+    client.force_login(user=user)
+    context = {
+        'start_date': '2000-01-15',
+        'end_date': '2000-01-16',
+        'amount': 2000,
+        'category': category.pk,
+
+    }
+    count = Budget.objects.count()
+    assert count == 1
+    response = client.post(reverse('add-budget'), context)
+
+    assert Budget.objects.count() == count + 1
+    assert response.status_code == 302
 
 
