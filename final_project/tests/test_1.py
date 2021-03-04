@@ -1,9 +1,8 @@
 import pytest
-from django.test import Client
+from django.test import Client, TestCase
 from savings_app.models import Expense, Budget, Category, AppUsers, Cities
-from django.shortcuts import reverse
-from datetime import datetime
-from django.contrib.auth import get_user_model
+from django.urls import reverse
+
 
 
 @pytest.fixture
@@ -14,7 +13,11 @@ def client():
 
 @pytest.fixture
 def city():
-    city = Cities.objects.create(name='NightCity', country='Cyberpunk', region='dystopian', key=101010)
+    city = Cities.objects.create(
+        name='NightCity',
+        country='Cyberpunk',
+        region='dystopian',
+        key=101010)
     return city
 
 
@@ -87,6 +90,28 @@ def test_login_post(client):
     assert response.status_code == 200
 
 
+@pytest.mark.django_db
+def test_add_user(user, client, city):
+    response = client.get(reverse('add-user'))
+    assert response.status_code == 200
+
+    context = {'username': 'test_name2',
+               'first_name': 'test_first_name2',
+               'last_name': 'test_last_name2',
+               'password': 'test_password2',
+               'repeat_password': 'test_password2',
+               'email': 'test@mail.com',
+               'date_of_birth': '2001-01-01',
+               'city': city
+               }
+    count = AppUsers.objects.count()
+    assert count == 1
+    response = client.post(reverse('add-user'), context)
+
+    assert AppUsers.objects.count() == count + 1
+    assert response.status_code == 302
+
+
 def test_expense_view_not_logged(client):
     """
         tests and attempt to access Expense_List_Form_View while not logged in,
@@ -124,51 +149,50 @@ def test_budget_modify_get(client, user, budget):
 
 
 # @pytest.mark.django_db
-# def test_expenses_list_form_view(client):
-#     client.force_login(user='test_user')
+# def test_expenses_list_form_view(client, user, category, expense):
+#     client.force_login(user=user)
 #     context = {
 #         "name": 'test_expense',
 #         "description": 'test_description',
-#         'category': 'food',
-#         "price": 19.99,
-#         'owner': client,
-#         'created': datetime.now(),
+#         'category': category,
+#         "price": 100,
 #
 #     }
 #     count = Expense.objects.count()
-#     response = client.post(reverse('expenses'), context)
-#     exp = Expense.objects.get(
-#                             name='test_product',
+#     response = client.post(reverse('expense-list-form'), context)
+#     expense = Expense.objects.filter(
+#                             name='test_expense',
 #                             description='test_description',
-#                             category='food',
-#                             price=19.99,
-#                             owner=client,
-#                             created=datetime.now
+#                             category=category,
+#                             price=100,
 #     )
-#     assert exp != None
+#     assert expense != None
 #     assert Expense.objects.count() == count + 1
 #     assert response.status_code == 302
 
 
 # @pytest.mark.django_db
-# def test_add_budget_form(client, user, category):
+# def test_add_budget_form(budget, client, user, category):
 #     client.force_login(user=user)
 #     context = {
-#         'start_date': '2000-01-01',
-#         'end_date': '2000-01-02',
-#         'amount': 1000,
+#         'start_date': '2000-01-15',
+#         'end_date': '2000-01-16',
+#         'amount': 2000,
 #         'category': category,
-#         'owner': user,
+#
 #     }
 #     count = Budget.objects.count()
+#     assert count == 1
 #     response = client.post(reverse('add-budget'), context)
-#     bdg = Budget.objects.get(
-#         start_date='2000-01-01',
-#         end_date='2000-01-02',
-#         amount=1000,
+#     bdg = Budget.objects.filter(
+#         start_date='2000-01-15',
+#         end_date='2000-01-16',
+#         amount=2000,
 #         category=category,
-#         owner=user,
+#
 #     )
 #     assert bdg != None
 #     assert Budget.objects.count() == count + 1
 #     assert response.status_code == 302
+
+

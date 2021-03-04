@@ -26,38 +26,22 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         expenses = Expense.objects.filter(owner=request.user).order_by('-created')
         budgets = Budget.objects.filter(owner=request.user)
 
-        if expenses and budgets:
-            exp_sum = expenses.aggregate(Sum('price'))['price__sum']
-            bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
+        exp_sum = expenses.aggregate(Sum('price'))['price__sum']
+        bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
+        bdg_per_ctg = Budget.objects.filter(owner=request.user, category=2)
+        bdg_per_ctg_sum = bdg_per_ctg.aggregate(Sum('amount'))['amount__sum']
 
-            bdg_per_ctg = Budget.objects.filter(owner=request.user, category=1)
-            bdg_per_ctg_sum = bdg_per_ctg.aggregate(Sum('amount'))['amount__sum']
-            if bdg_per_ctg:
-                bdg_days = (bdg_per_ctg.values('end_date').first()['end_date'] - datetime.now().date()).days
-                ctx = {
-                    'expenses': expenses,
-                    'budgets': budgets,
-                    'form': form,
-                    'exp_sum': exp_sum,
-                    'bdg_sum': bdg_sum,
-                    'bdg_per_ctg': bdg_per_ctg_sum,
-                    'bdg_days': bdg_days}
-            ctx = {
-                'expenses': expenses,
-                'budgets': budgets,
-                'form': form,
-                'exp_sum': exp_sum,
-                'bdg_sum': bdg_sum,
-                'bdg_per_ctg': bdg_per_ctg_sum,
+        ctx = {'form': form,
+               'expenses': expenses,
+               'budgets': budgets,
+               'exp_sum': exp_sum,
+               'bdg_sum': bdg_sum,
+               'bdg_per_ctg_sum': bdg_per_ctg_sum}
 
-            }
-            return render(request, 'add_expense_form.html', ctx)
+        if bdg_per_ctg:
+            bdg_days = (bdg_per_ctg.values('end_date').first()['end_date'] - datetime.now().date()).days
+            ctx['bdg_days'] = bdg_days
 
-        ctx = {
-            'expenses': expenses,
-            'budgets': budgets,
-            'form': form
-        }
         return render(request, 'add_expense_form.html', ctx)
 
     def post(self, request):
