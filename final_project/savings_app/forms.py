@@ -1,8 +1,6 @@
 from django import forms
-from .models import AppUsers, Cities, Category
-from django.core.validators import EmailValidator, URLValidator
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from .models import AppUsers, Category
+
 
 def number_validator(number):
     if not number > 0:

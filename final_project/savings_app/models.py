@@ -37,7 +37,7 @@ class Category(models.Model):
       """
     name = models.CharField(max_length=60)
     description = models.TextField()
-    expenses = models.ManyToManyField(AppUsers, through='Expense')
+    owners = models.ManyToManyField(AppUsers, through='Budget')
 
     def __str__(self):
         return self.name

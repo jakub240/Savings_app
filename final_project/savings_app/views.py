@@ -1,16 +1,12 @@
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.views import View
 from django.urls import reverse_lazy
 from django.db.models import Sum
-from .models import Expense, AppUsers, Budget, Category
+from .models import Expense, Budget, Category
 from .forms import AddExpenseForm, AddUserForm, AddBudgetForm
 from django.views.generic.edit import FormView, UpdateView
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
 
 
 class LandingPageView(View):
@@ -28,26 +24,48 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         exp_sum = expenses.aggregate(Sum('price'))['price__sum']
         bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
 
-        bdg_per_ctg = Budget.objects.filter(owner=request.user, category=3)
-        bdg_per_ctg_sum = bdg_per_ctg.aggregate(Sum('amount'))['amount__sum']
-
-        exp_per_ctg = Expense.objects.filter(owner=request.user, category=3)
-        exp_per_ctg_sum = exp_per_ctg.aggregate(Sum('price'))['price__sum']
+        categories = Category.objects.filter(owners=request.user)
+        budgets_lst = []
 
         ctx = {'form': form,
                'expenses': expenses,
                'budgets': budgets,
                'exp_sum': exp_sum,
                'bdg_sum': bdg_sum,
-               'bdg_per_ctg_sum': bdg_per_ctg_sum,
-               'exp_per_ctg_sum': exp_per_ctg_sum,
-        }
+               'categories': categories,
+               }
 
-        if bdg_per_ctg:
-            bdg_days = (bdg_per_ctg.values('end_date').first()['end_date'] - datetime.now().date()).days
-            bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
-            ctx['bdg_days'] = bdg_days
-            ctx['bdg_per_day'] = bdg_per_day
+        if budgets or expenses:
+            for ctg in categories:
+                bdg_per_ctg_qs = Budget.objects.filter(owner=request.user, category=ctg.pk)
+                bdg_per_ctg_sum = bdg_per_ctg_qs.aggregate(Sum('amount'))['amount__sum']
+
+                if bdg_per_ctg_qs:
+                    bdg = bdg_per_ctg_qs.first()
+                    today = datetime.now().date()
+                    if bdg.start_date <= today:
+                        bdg_days = (bdg.end_date - today).days
+                    else:
+                        bdg_days = (bdg.end_date - bdg.start_date).days
+
+                    exp_per_ctg = Expense.objects.filter(owner=request.user,
+                                                         category=ctg.pk,
+                                                         created__gte=bdg.start_date,
+                                                         created__lte=bdg.end_date,
+                                                         )
+                else:
+                    exp_per_ctg = []
+
+                if exp_per_ctg:
+                    exp_per_ctg_sum = exp_per_ctg.aggregate(Sum('price'))['price__sum']
+                else:
+                    exp_per_ctg_sum = 0
+
+                bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
+
+                budgets_lst.append((ctg, bdg_per_ctg_sum, bdg_days, bdg_per_day))
+
+        ctx['budgets_lst'] = budgets_lst
 
         return render(request, 'add_expense_form.html', ctx)
 
@@ -61,7 +79,6 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                 category=form.cleaned_data['category'],
                 price=form.cleaned_data['price'],
                 owner=current_user,
-                created=datetime.now()
             )
         return redirect('expense-list-form')
 

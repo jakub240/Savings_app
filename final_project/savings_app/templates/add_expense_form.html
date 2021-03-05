@@ -62,17 +62,21 @@
                         </th>
 
                     </tr>
-            {% empty %}
-                <li>It seems you have no budget added yet.</li>
-            {% endfor %}
+                {% empty %}
+                    <li>It seems you have no budget added yet.</li>
+                {% endfor %}
                 </table>
-            <div>
-                <p> Sum of your budgets: {{ bdg_sum }} </p>
-                <p> Amount of Budget per category: {{ bdg_per_ctg_sum }}</p>
-                <p> Budget days left : {{ bdg_days }}</p>
-                <p> Budget per day : {{ bdg_per_day }}</p>
+            <p> Sum of your budgets: {{ bdg_sum }} </p>
+            <hr>
+                {% for ctg, bdg_sum, bdg_days, bdg_per_day in budgets_lst %}
+                <div>
 
-            </div>
+                    <p> Amount of Budget per category <strong>{{ ctg.name }}</strong> : </p>
+                    <p> Budget days left : {{ bdg_days }}</p>
+                    <p> Budget per day : {{ bdg_per_day }}</p>
+                    <hr>
+                </div>
+                {% endfor %}
         </div>
         <hr>
             <h2>Add New Expense</h2>
