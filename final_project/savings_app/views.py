@@ -94,7 +94,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
 class AddBudgetFormView(View):
     """
-    A view for AddBudgetForm
+    A form view for adding object in Budget model
     """
     def get(self, request):
         form = AddBudgetForm()

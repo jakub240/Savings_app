@@ -31,11 +31,11 @@ from savings_app.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', UserProfileView.as_view(), name='profile-view'),
-    path('/accounts/logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('', LandingPageView.as_view(), name='landing-page'),
-    path('/add_user/', AddUserView.as_view(), name='add-user'),
+    path('add_user/', AddUserView.as_view(), name='add-user'),
     path('expenses/', ExpensesListFormView.as_view(), name='expense-list-form'),
     path('add_budget/', AddBudgetFormView.as_view(), name='add-budget'),
     path('expenses/remove/<int:expense_id>/', ExpenseRemoveView.as_view(), name='expense-remove'),
