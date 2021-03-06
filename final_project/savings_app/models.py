@@ -33,7 +33,7 @@ class Category(models.Model):
     """
       - name: name of the category,
       - description: description of the category,
-      - expenses - 'many to many' relation to User model through Expenses
+      - owners - 'many to many' relation to User model through Budget
       """
     name = models.CharField(max_length=60)
     description = models.TextField()

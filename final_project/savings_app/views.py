@@ -10,11 +10,20 @@ from datetime import datetime
 
 
 class LandingPageView(View):
+    """
+    Landing Page/Main Page.
+    Renders base html
+    """
     def get(self, request):
         return render(request, 'base.html')
 
 
 class ExpensesListFormView(LoginRequiredMixin, View):
+    """
+    Main view for an app, available for logged User.
+    Renders a list of Expenses and Budgets added by a User and offers a variety of calculations on these objects.
+    It also includes a AddExpenseForm.
+    """
     login_url = '/accounts/login/'
 
     def get(self, request):
@@ -25,7 +34,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
 
         categories = Category.objects.filter(owners=request.user)
-        budgets_lst = []
+        context_data_lst = []
 
         ctx = {'form': form,
                'expenses': expenses,
@@ -63,9 +72,9 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
                 bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
 
-                budgets_lst.append((ctg, bdg_per_ctg_sum, bdg_days, bdg_per_day))
+                context_data_lst.append((ctg, exp_per_ctg_sum, bdg_days, bdg_per_day))
 
-        ctx['budgets_lst'] = budgets_lst
+        ctx['ctx_lst'] = context_data_lst
 
         return render(request, 'add_expense_form.html', ctx)
 
@@ -84,6 +93,9 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
 
 class AddBudgetFormView(View):
+    """
+    A view for AddBudgetForm
+    """
     def get(self, request):
         form = AddBudgetForm()
         ctx = {
@@ -106,18 +118,27 @@ class AddBudgetFormView(View):
 
 
 class ExpenseRemoveView(View):
+    """
+    Delete method for Expense model
+    """
     def get(self, request, expense_id):
         Expense.objects.get(pk=expense_id).delete()
         return redirect('expense-list-form')
 
 
 class BudgetRemoveView(View):
+    """
+    Delete method for Budget model
+    """
     def get(self, request, budget_id):
         Budget.objects.get(pk=budget_id).delete()
         return redirect('expense-list-form')
 
 
 class ExpenseModifyView(UpdateView):
+    """
+    Update method for Expense model
+    """
     model = Expense
     fields = ['name', 'description', 'category', 'price']
     template_name_suffix = '_modify'
@@ -125,6 +146,9 @@ class ExpenseModifyView(UpdateView):
 
 
 class BudgetModifyView(UpdateView):
+    """
+    Update method for Budget model
+    """
     model = Budget
     fields = ['amount', 'category', 'start_date', 'end_date']
     template_name_suffix = '_modify'
@@ -132,6 +156,9 @@ class BudgetModifyView(UpdateView):
 
 
 class AddUserView(FormView):
+    """
+    View for AddUserForm
+    """
     form_class = AddUserForm
     template_name = "registration/add_user.html"
     success_url = reverse_lazy('landing-page')
@@ -144,6 +171,9 @@ class AddUserView(FormView):
 
 
 class UserProfileView(View):
+    """
+    View displayed after successful login
+    """
     def get(self, request):
         return render(request, 'registration/profile.html')
 

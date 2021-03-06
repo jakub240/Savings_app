@@ -92,6 +92,9 @@ def test_login_post(client):
 
 @pytest.mark.django_db
 def test_add_user(user, client, city):
+    """
+        tests using Post method on AddUserView
+    """
     response = client.get(reverse('add-user'))
     assert response.status_code == 200
 
@@ -136,6 +139,9 @@ def test_expense_view_logged(client, user, expense):
 
 @pytest.mark.django_db
 def test_expense_modify_get(client, user, expense):
+    """
+        test for ExpenseModifyView
+    """
     client.force_login(user=user)
     response = client.get(reverse('expense-modify', kwargs={'pk': expense.id}))
     assert response.status_code == 200
@@ -143,6 +149,9 @@ def test_expense_modify_get(client, user, expense):
 
 @pytest.mark.django_db
 def test_budget_modify_get(client, user, budget):
+    """
+        test for BudgetModifyView
+    """
     client.force_login(user=user)
     response = client.get(reverse('budget-modify', kwargs={'pk': budget.id}))
     assert response.status_code == 200
@@ -150,6 +159,9 @@ def test_budget_modify_get(client, user, budget):
 
 @pytest.mark.django_db
 def test_expenses_add(client, user, category, expense):
+    """
+        test for post method for ExpensesListFormView
+    """
     client.force_login(user=user)
     post_data = {
         "name": 'test_expense',
@@ -167,6 +179,9 @@ def test_expenses_add(client, user, category, expense):
 
 @pytest.mark.django_db
 def test_budget_add(budget, client, user, category):
+    """
+        test for AddBudgetFormView
+    """
     client.force_login(user=user)
     post_data = {
         'start_date': '2000-01-15',
