@@ -1,4 +1,7 @@
-Update 28.02.2021
+Update 07.03.2021
+
+This is an educational project of an app designed to help with managing savings and expenses.
+More info below:
 
 Manual:\
 initialize model Cities and Category with  
@@ -13,27 +16,12 @@ python manage.py runserver
 3. Go to "list of expenses"
 4. Enjoy
 
-Zawartość:
-- dodawanie, usuwanie, modyfikacja wydatków i budżetów (z walidacją że 
-  wyświetlają się tylko te dodane przez zalogowanego użytkownika)
-- logowanie, wylogowywanie, zakładanie konta (widok wydatków jest dostępny 
-  tylko dla zalogowanych)
-- na razie jest proste sumowanie wydatków i budżetów. Docelowo będa jakieś podziały na procenty 
-  itp.
+About:
+The main view of an app ("Expenses") consists of expenses added by user. You can also add budgets for each category
+(specify amount and period) and the site calculates (based on current expenses) how much money you can spend daily
+to maintain the budget for selected period of time.
 
-Do zrobienia:
-- testy
-  
-- w tej chwili relacja modelu Budget do Category jest Foreign Key. Pewnie fajnie byłoby gdyby to
-	było ManytoMany (wtedy Budżet można byłoby przenaczyć na kilka(lub żadną) kategorii naraz). 
-  Z tym miałem problem z metodą post do tworzenia + pewien problem logiczny o którym niżej.
-  
-- ideą dodania Budżetu (poza tym żę można wyświetlać prostą różnicę Budżet minus Wydatki) było wyświetlanie
- wyniku działania Budżet / liczba dni od datetime.now do końca end_date = dzienna norma do wydania minus suma 
-  wydatków na daną kategorię (aktualizowałoby się na bieżąco). Nie wiem czy dodanie ManytoMany troche tego nie rozwali, gdyż w obecnej sytuacji
-  sensowne jest robienie jednego Budżetu na kategorie (i wyświetlanie razem z tym wynikiem co opisane wyżej).
-  Budżety mogą miec dowolne start_end_date więc branie ich razem i próba agregacji tego wyniku "normy dziennej do wydawania"
-  chyba nie zadziała.
-  
-- do tego co wyżej na pewno warto zrobić sortowanie i paginacje (przynajmniej do wydatków bo ich będzie dużo więcej niż budżetów)
- Nie wiem czy to tez troche nie rozsypie pomysłu z problemu opisanego wyżej. 
+- app still is and will be developed in the future
+- for now both Cities and Categories are limited to a couple of rows.
+- since the course was focused on back-end functionalities, front-end side of the site is (for now) simplified.
+
