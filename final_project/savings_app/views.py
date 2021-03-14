@@ -22,7 +22,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
     """
     Main view for an app, available for logged User.
     Renders a list of Expenses and Budgets added by a User and offers a variety of calculations on these objects.
-    It also includes a AddExpenseForm.
+    It also includes an AddExpenseForm.
     """
     login_url = '/accounts/login/'
 
@@ -30,8 +30,8 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         form = AddExpenseForm()
         expenses = Expense.objects.filter(owner=request.user).order_by('-created')
         budgets = Budget.objects.filter(owner=request.user)
-        exp_sum = expenses.aggregate(Sum('price'))['price__sum']
-        bdg_sum = budgets.aggregate(Sum('amount'))['amount__sum']
+        exp_sum = round(expenses.aggregate(Sum('price'))['price__sum'], 2)
+        bdg_sum = round(budgets.aggregate(Sum('amount'))['amount__sum'], 2)
 
         categories = Category.objects.filter(owners=request.user)
         context_data_lst = []
@@ -66,7 +66,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                     exp_per_ctg = []
 
                 if exp_per_ctg:
-                    exp_per_ctg_sum = exp_per_ctg.aggregate(Sum('price'))['price__sum']
+                    exp_per_ctg_sum = round(exp_per_ctg.aggregate(Sum('price'))['price__sum'], 2)
                 else:
                     exp_per_ctg_sum = 0
 
