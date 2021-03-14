@@ -69,7 +69,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 pytestdebug.log
-
+.local_settings.py
 # Translations
 *.mo
 

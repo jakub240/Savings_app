@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,10 +26,15 @@ SECRET_KEY = '#@64bc)gv9dw$fww50f8qpd$zlr&y$_m6-n&b)zeivaw-oc3^_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 
 # Application definition
+
+try:
+    from .local_settings import SECRET_KEY, DEBUG, ALLOWED_HOSTS
+except ImportError:
+    pass
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'savings_app',
+    'whitenoise.runserver_nostatic',
+    'django.contrib.staticfiles',
 
 ]
 
@@ -74,6 +82,10 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+try:
+    from .local_settings import DATABASES
+except ImportError:
+    pass
 
 DATABASES = {
      'default': {
@@ -126,3 +138,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'savings_app.AppUsers'
+
+
+# Configure Django App for Heroku
+import django_on_heroku
+django_on_heroku.settings(locals())
