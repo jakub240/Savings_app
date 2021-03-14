@@ -20,21 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.1/howto/deployment/checkli
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#@64bc)gv9dw$fww50f8qpd$zlr&y$_m6-n&b)zeivaw-oc3^_'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
-
-
-# Application definition
-
 try:
     from .local_settings import SECRET_KEY, DEBUG, ALLOWED_HOSTS
 except ImportError:
-    pass
+    SECRET_KEY = "placeholder"
+    DEBUG = True
+    ALLOWED_HOSTS = []
+
+# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,11 +77,14 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databasestry:
+
 try:
     from .local_settings import DATABASES
 except ImportError:
-    pass
+    DATABASES = {
+        'default': {'ENGINE': None},  # placeholder
+    }
 
 DATABASES = {
      'default': {
