@@ -7,9 +7,9 @@ Manual:\
 initialize model Cities and Category with  
 python manage.py loaddata data_category.json\
 python manage.py loaddata data_cities.json \
-python manage.py makemigrations\
-python manage.py migrate\
-python manage.py runserver
+
+- migrate data
+- run server
 
 1. Try to log in.
 2. If you don't have an account Create a profile

@@ -16,19 +16,17 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checkli
 # SECURITY WARNING: keep the secret key used in production secret!
-try:
-    from .local_settings import SECRET_KEY, DEBUG, ALLOWED_HOSTS
-except ImportError:
-    SECRET_KEY = "placeholder"
-    DEBUG = True
-    ALLOWED_HOSTS = []
+SECRET_KEY = 'cku6vb$%1+4$i90!aq6)!vh-j8ab@(qxb&70^u*4m8n$s5plxc'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -40,9 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'savings_app',
-    'whitenoise.runserver_nostatic',
-    'django.contrib.staticfiles',
-
 ]
 
 MIDDLEWARE = [
@@ -79,12 +74,6 @@ WSGI_APPLICATION = 'final_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databasestry:
 
-try:
-    from .local_settings import DATABASES
-except ImportError:
-    DATABASES = {
-        'default': {'ENGINE': None},  # placeholder
-    }
 
 DATABASES = {
      'default': {
@@ -139,6 +128,3 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'savings_app.AppUsers'
 
 
-# Configure Django App for Heroku
-import django_on_heroku
-django_on_heroku.settings(locals())
