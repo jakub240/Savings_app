@@ -1,1 +1,1 @@
-web: gunicorn Savings_app/final_project.wsgi --log-file -
+web: gunicorn final_project/final_project.wsgi --log-file -
