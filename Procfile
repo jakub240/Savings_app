@@ -1,0 +1,1 @@
+web: gunicorn Savings_app/final_project.wsgi --log-file -
