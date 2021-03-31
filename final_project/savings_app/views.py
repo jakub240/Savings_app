@@ -27,6 +27,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
+        global bdg_days
         form = AddExpenseForm()
         expenses = Expense.objects.filter(owner=request.user).order_by('-created')
         budgets = Budget.objects.filter(owner=request.user)
@@ -59,8 +60,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
                     exp_per_ctg = Expense.objects.filter(owner=request.user,
                                                          category=ctg.pk,
-                                                         created__gte=bdg.start_date,
-                                                         created__lte=bdg.end_date,
+                                                         created__range=(bdg.start_date, bdg.end_date),
                                                          )
                 else:
                     exp_per_ctg = []
