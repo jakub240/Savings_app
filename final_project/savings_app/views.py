@@ -70,7 +70,10 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                 else:
                     exp_per_ctg_sum = 0
 
-                bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
+                if bdg_days <= 0:
+                    bdg_per_day = 'Budget has come to an end'
+                else:
+                    bdg_per_day = str(round((bdg_per_ctg_sum - exp_per_ctg_sum) / bdg_days, 2))
 
                 context_data_lst.append((ctg, exp_per_ctg_sum, bdg_days, bdg_per_day))
 
