@@ -57,7 +57,9 @@ class Expense(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     owner = models.ForeignKey(AppUsers, on_delete=models.CASCADE)
     price = models.FloatField(default=0)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateField(auto_now_add=True)
+    expense_date = models.DateField()
+    modify_date = models.DateField(default=None)
 
 
 class Budget(models.Model):
