@@ -9,9 +9,10 @@ def number_validator(number):
 
 class AddExpenseForm(forms.Form):
     name = forms.CharField()
-    description = forms.CharField()
+    description = forms.CharField(required=False)
     category = forms.ModelChoiceField(queryset=Category.objects, empty_label=None)
     price = forms.DecimalField(decimal_places=2, min_value=0, validators=[number_validator])
+    expense_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
 
 class AddUserForm(forms.ModelForm):
@@ -43,7 +44,7 @@ class AddUserForm(forms.ModelForm):
 
 
 class AddBudgetForm(forms.Form):
-    start_date = forms.DateTimeField()
-    end_date = forms.DateTimeField()
+    start_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
     amount = forms.DecimalField(decimal_places=2, min_value=0, validators=[number_validator])
     category = forms.ModelChoiceField(queryset=Category.objects, empty_label=None)

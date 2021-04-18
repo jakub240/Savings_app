@@ -53,13 +53,13 @@ class Expense(models.Model):
       - created: date, when the expense was added
       """
     name = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(max_length=100, blank=True, default='')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     owner = models.ForeignKey(AppUsers, on_delete=models.CASCADE)
     price = models.FloatField(default=0)
     created = models.DateField(auto_now_add=True)
     expense_date = models.DateField()
-    modify_date = models.DateField(default=None)
+    modify_date = models.DateField(auto_now_add=True)
 
 
 class Budget(models.Model):

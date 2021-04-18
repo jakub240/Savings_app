@@ -29,23 +29,25 @@ class ExpensesListFormView(LoginRequiredMixin, View):
     def get(self, request):
         global bdg_days
         form = AddExpenseForm()
-        expenses = Expense.objects.filter(owner=request.user).order_by('-created')
+        expenses = Expense.objects.filter(owner=request.user).order_by('-expense_date')
         budgets = Budget.objects.filter(owner=request.user)
-        exp_sum = round(expenses.aggregate(Sum('price'))['price__sum'], 2)
-        bdg_sum = round(budgets.aggregate(Sum('amount'))['amount__sum'], 2)
 
         categories = Category.objects.filter(owners=request.user)
         context_data_lst = []
 
         ctx = {'form': form,
                'expenses': expenses,
-               'budgets': budgets,
-               'exp_sum': exp_sum,
-               'bdg_sum': bdg_sum,
+               'budgets': budgets,                
                'categories': categories,
-               }
+        }
 
-        if budgets or expenses:
+        if budgets and expenses:
+            exp_sum = round(expenses.aggregate(Sum('price'))['price__sum'], 2)
+            bdg_sum = round(budgets.aggregate(Sum('amount'))['amount__sum'], 2)
+
+            ctx['exp_sum'] = exp_sum
+            ctx['bdg_sum'] = bdg_sum  
+
             for ctg in categories:
                 bdg_per_ctg_qs = Budget.objects.filter(owner=request.user, category=ctg.pk)
                 bdg_per_ctg_sum = bdg_per_ctg_qs.aggregate(Sum('amount'))['amount__sum']
@@ -60,7 +62,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
 
                     exp_per_ctg = Expense.objects.filter(owner=request.user,
                                                          category=ctg.pk,
-                                                         created__range=(bdg.start_date, bdg.end_date),
+                                                         expense_date__range=(bdg.start_date, bdg.end_date),
                                                          )
                 else:
                     exp_per_ctg = []
@@ -90,6 +92,7 @@ class ExpensesListFormView(LoginRequiredMixin, View):
                 description=form.cleaned_data['description'],
                 category=form.cleaned_data['category'],
                 price=form.cleaned_data['price'],
+                expense_date =form.cleaned_data['expense_date'],
                 owner=current_user,
             )
         return redirect('expense-list-form')
@@ -143,7 +146,7 @@ class ExpenseModifyView(UpdateView):
     Update method for Expense model
     """
     model = Expense
-    fields = ['name', 'description', 'category', 'price']
+    fields = ['name', 'description', 'category', 'price', 'expense_date']
     template_name_suffix = '_modify'
     success_url = reverse_lazy('expense-list-form')
 
