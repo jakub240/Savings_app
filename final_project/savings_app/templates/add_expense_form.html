@@ -16,7 +16,7 @@
                         <th> {{ exp.name }} </th>
                         <th> {{ exp.price }} </th>
                         <th> {{ exp.category }}</th>
-                        <th> {{ exp.created|date:"Y, M d"}}</th>
+                        <th> {{ exp.expense_date|date:"Y, M d"}}</th>
                         <th>
                              <a href="{% url 'expense-modify' exp.id %}">Modify</a>
                         </th>
