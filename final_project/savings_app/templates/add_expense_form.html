@@ -11,7 +11,7 @@
                         <th>Category</th>
                         <th>Date</th>
                     </tr>
-                 {% for exp in expenses %}
+                 {% for exp in expenses_in_pages %}
                     <tr>
                         <th> {{ exp.name }} </th>
                         <th> {{ exp.price }} </th>
@@ -29,6 +29,30 @@
                 <li>It seems you have no expenses added yet.</li>
             {% endfor %}
                 </table>
+
+            {% if expenses_in_pages.has_other_pages %}
+            <div>
+                {% if expenses_in_pages.has_previous %}
+                <a href='?page={{ expenses_in_pages.previous_page_number }}'>&lt; previous</a>
+                {% endif %}
+
+                {% for i in expenses_in_pages.paginator.page_range %}
+                    {% if expenses_in_pages.number == i %}
+                        <span>{{ i }}</span>
+                    {% else %}
+                        <a href='?page={{ i }}'>| {{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if expenses_in_pages.has_next %}
+                <a href='?page={{ expenses_in_pages.next_page_number }}'>&lt; next</a>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+
+            </div>
             <div>
                 <p> Sum of your expenses: {{ exp_sum }} </p>
             </div>

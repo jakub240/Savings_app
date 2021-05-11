@@ -7,6 +7,7 @@ from .forms import AddExpenseForm, AddUserForm, AddBudgetForm
 from django.views.generic.edit import FormView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
+from django.core.paginator import Paginator
 
 
 class LandingPageView(View):
@@ -35,17 +36,25 @@ class ExpensesListFormView(LoginRequiredMixin, View):
         categories = Category.objects.filter(owners=request.user)
         context_data_lst = []
 
+        paginator = Paginator(expenses, 5)
+        page = request.GET.get('page')
+        expenses_in_pages = paginator.get_page(page)
+        # ctx['expenses_in_pages'] = expenses_in_pages
+
         ctx = {'form': form,
                'expenses': expenses,
                'budgets': budgets,                
                'categories': categories,
+               'expenses_in_pages': expenses_in_pages
         }
 
-        if budgets and expenses:
+        if expenses:
             exp_sum = round(expenses.aggregate(Sum('price'))['price__sum'], 2)
-            bdg_sum = round(budgets.aggregate(Sum('amount'))['amount__sum'], 2)
+            ctx['exp_sum'] = exp_sum            
 
-            ctx['exp_sum'] = exp_sum
+
+        if budgets and expenses:            
+            bdg_sum = round(budgets.aggregate(Sum('amount'))['amount__sum'], 2)            
             ctx['bdg_sum'] = bdg_sum  
 
             for ctg in categories:
